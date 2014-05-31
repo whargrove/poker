@@ -23,7 +23,8 @@ io.on('connection', function(socket) {
   socket.on('disconnect', function() {
     socket.broadcast.emit('user-left', socket.id);
     console.log('Socket: ' + socket.id + ' disconnected.')
-  })
+  });
 });
 
-server.listen(3000);
+var port = Number(process.env.PORT || 3000);
+server.listen(port);
