@@ -58,6 +58,11 @@
       $('#connected-users').append($('<li>').attr("id", usr.id).text(usr.displayName));
     });
 
+    // Listen for user-voted and add the vote for the user
+    socket.on('user-voted', function(usr) {
+      $('#' + usr.id).append(' – ' + usr.vote);
+    });
+
     // When a user disconnects, remove them from #connected-users
     socket.on('user-left', function(socketId) {
       $('#' + socketId).remove()
