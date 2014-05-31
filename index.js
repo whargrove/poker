@@ -18,7 +18,7 @@ io.on('connection', function(socket) {
     usr.displayName = user;
     usr.id = socket.id;
     // Broadcast the new user to connected sockets
-    socket.broadcast.emit('user-registered', usr);
+    socket.emit('user-registered', usr);
     console.log('Socket: ' + usr.id + ' registered as ' + usr.displayName + '.');
   });
 
