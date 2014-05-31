@@ -1,5 +1,7 @@
 # Scrum Poker
 
+A real-time sprint planning app for remote teams.
+
 ## Install
 
 `npm install`
