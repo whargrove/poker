@@ -18,7 +18,7 @@ io.on('connection', function(socket) {
     usr.displayName = user;
     usr.id = socket.id;
     // Broadcast the new user to connected sockets
-    socket.emit('user-registered', usr);
+    io.emit('user-registered', usr);
     console.log('Socket: ' + usr.id + ' registered as ' + usr.displayName + '.');
   });
 
@@ -29,7 +29,7 @@ io.on('connection', function(socket) {
     usr.id = socket.id;
     usr.vote = vote;
     // Broadcast the user's vote to connected sockets
-    socket.broadcast.emit('user-voted', usr);
+    io.emit('user-voted', usr);
     console.log('Socket: ' + usr.id + ' voted with ' + usr.vote + '.');
   });
 
