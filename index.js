@@ -6,6 +6,10 @@ app.get('/', function(req, res) {
   res.sendfile('index.html');
 });
 
+app.get('/index.css', function(req, res) {
+  res.sendfile('index.css');
+});
+
 io.on('connection', function(socket) {
   console.log('Socket: ' + socket.id + ' connected.');
   socket.on('new-user', function(user) {
@@ -16,6 +20,15 @@ io.on('connection', function(socket) {
     // Broadcast the new user to all connected sockets
     socket.broadcast.emit('user-registered', usr);
     console.log('Socket: ' + usr.id + ' registered as ' + usr.displayName + '.');
+  });
+
+  // Listen for new votes
+  // Match vote with socket.id and broadcast vote to connected sockets
+  socket.on('vote', function(vote) {
+    var usr = new Object();
+    usr.id = socket.id;
+    usr.vote = vote;
+    console.log('Socket: ' + usr.id + ' voted with ' + usr.vote + '.');
   });
 
   // When a socket disconnects, broadcast user-left

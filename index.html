@@ -5,6 +5,7 @@
   <title>Scrum Poker</title>
   <script type="text/javascript" src="/socket.io/socket.io.js"></script>
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="index.css">
 </head>
 <body>
   <h1>Welcome to Scrum Poker</h1>
@@ -14,6 +15,19 @@
   </form>
   <h1>Connected Users</h1>
   <ul id="connected-users"></ul>
+  <div id="voting">
+    <h1>Voting</h1>
+    <button id="fibonacci-1" class="fibonacci">1</button>
+    <button id="fibonacci-2" class="fibonacci">2</button>
+    <button id="fibonacci-3" class="fibonacci">3</button>
+    <button id="fibonacci-5" class="fibonacci">5</button>
+    <button id="fibonacci-8" class="fibonacci">8</button>
+    <button id="fibonacci-13" class="fibonacci">13</button>
+    <button id="fibonacci-21" class="fibonacci">21</button>
+    <button id="fibonacci-34" class="fibonacci">34</button>
+    <button id="fibonacci-55" class="fibonacci">55</button>
+    <button id="fibonacci-infin" class="fibonacci">∞</button>
+  </div>
   <script type="text/javascript">
     // Create the socket.io client
     var socket = io();
@@ -26,7 +40,17 @@
       $('#connected-users').append($('<li>').text('You (' + user + ')'));
       // Hide the #register form so the same socket cannot register again
       $('#register').hide();
+      // Reveal #voting
+      $('#voting').show();
       return false;
+    });
+
+    // Listen for click events on any voting buttons
+    // Send the vote value when onclick is fired
+    $('.fibonacci').on('click', function() {
+      var vote = $(this).text();
+      console.log($(this).text() + ' was clicked.');
+      socket.emit('vote', vote);
     });
 
     // Listen for the user-registered event and update the #connected-users list
