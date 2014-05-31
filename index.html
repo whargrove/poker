@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Scrum Poker</title>
+  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+</head>
+<body>
+  <h1>Welcome to Scrum Poker</h1>
+  <form id="register" action="">
+    <input id="user-name" type="text" />
+    <button>Register</button>
+  </form>
+  <h1>Connected Users</h1>
+  <ul id="connected-users"></ul>
+  <script type="text/javascript">
+    // Create the socket.io client
+    var socket = io();
+
+    // When a user resisters, emit the new-user event
+    $('#register').submit(function() {
+      var user = $('#user-name').val();
+      socket.emit('new-user', user);
+      $('#user-name').val('');
+      $('#connected-users').append($('<li>').text('You (' + user + ')'));
+      // Hide the #register form so the same socket cannot register again
+      $('#register').hide();
+      return false;
+    });
+
+    // Listen for the user-registered event and update the #connected-users list
+    socket.on('user-registered', function(usr) {
+      $('#connected-users').append($('<li>').attr("id", usr.id).text(usr.displayName));
+    });
+
+    // When a user disconnects, remove them from #connected-users
+    socket.on('user-left', function(socketId) {
+      $('#' + socketId).remove()
+      console.log('Socket: ' + socketId + ' disconnected.');
+    });
+  </script>
+</body>
+</html>
