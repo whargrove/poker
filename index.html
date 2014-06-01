@@ -18,8 +18,28 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-9">
-        <div id="connected-users" class="row"></div>
+      <div id="connected-users" class="col-md-9 col-xs-12"></div>
+      <div id="voting" class="col-md-3 col-xs-12">
+        <h2>Voting</h2>
+        <div class="btn-toolbar" role="toolbar">
+          <div class="btn-group">
+            <button id="fibonacci-1" class="fibonacci btn btn-default">1</button>
+            <button id="fibonacci-2" class="fibonacci btn btn-default">2</button>
+            <button id="fibonacci-3" class="fibonacci btn btn-default">3</button>
+            <button id="fibonacci-5" class="fibonacci btn btn-default">5</button>
+            <button id="fibonacci-8" class="fibonacci btn btn-default">8</button>
+          </div>
+          <div class="btn-group">
+            <button id="fibonacci-13" class="fibonacci btn btn-default">13</button>
+            <button id="fibonacci-21" class="fibonacci btn btn-default">21</button>
+            <button id="fibonacci-34" class="fibonacci btn btn-default">34</button>
+            <button id="fibonacci-55" class="fibonacci btn btn-default">55</button>
+          </div>
+          <div class="btn-group">
+            <button id="fibonacci-infin" class="fibonacci btn btn-default">∞</button>
+            <button id="clear-vote" class="btn btn-default">Clear</button>
+          </div>
+        </div>
       </div>
     </div>
     <div class="row">
@@ -31,22 +51,6 @@
           </div>
           <button type="submit" class="btn btn-default">Register</button>
         </form>
-      </div>
-    </div>
-    <div class="row">
-      <div id="voting" class="col-md-12">
-        <h3>Voting</h3>
-        <button id="fibonacci-1" class="fibonacci btn btn-default btn-lg">1</button>
-        <button id="fibonacci-2" class="fibonacci btn btn-default btn-lg">2</button>
-        <button id="fibonacci-3" class="fibonacci btn btn-default btn-lg">3</button>
-        <button id="fibonacci-5" class="fibonacci btn btn-default btn-lg">5</button>
-        <button id="fibonacci-8" class="fibonacci btn btn-default btn-lg">8</button>
-        <button id="fibonacci-13" class="fibonacci btn btn-default btn-lg">13</button>
-        <button id="fibonacci-21" class="fibonacci btn btn-default btn-lg">21</button>
-        <button id="fibonacci-34" class="fibonacci btn btn-default btn-lg">34</button>
-        <button id="fibonacci-55" class="fibonacci btn btn-default btn-lg">55</button>
-        <button id="fibonacci-infin" class="fibonacci btn btn-default btn-lg">∞</button>
-        <button id="clear-vote" class="btn btn-default btn-lg">Clear</button>
       </div>
     </div>
   </div>
@@ -68,7 +72,7 @@
 
     // Listen for the user-registered event and update the #connected-users list
     socket.on('user-registered', function(usr) {
-      $('#connected-users').append( '<div id="' + usr.id + '" class="col-xs-6 col-md-3 clearfix user"><img src="/avatar.jpg" class="hidden-xs avatar img-responsive" /><p><span class="user-vote h4" id="user-vote-' + usr.id + '">...</span><span class="user-name h4" id="user-name-' + usr.id + '"></span></p></div>' );
+      $('#connected-users').append( '<div id="' + usr.id + '" class="col-xs-12 col-md-3 clearfix user"><img src="/avatar.jpg" class="hidden-xs avatar img-responsive" /><p><span class="user-vote h4" id="user-vote-' + usr.id + '">...</span><span class="user-name h4" id="user-name-' + usr.id + '"></span></p></div>' );
       $('#user-name-' + usr.id).text(usr.displayName);
     });
 

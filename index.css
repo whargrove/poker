@@ -19,7 +19,7 @@ span.user-vote {
   min-height: 43px;
   padding: 10px;
   margin-right: 1em;
-  border: gray solid 1px;
+  border: #999 solid 1px;
   border-radius: 6px;
   text-align: center;
 }
@@ -28,4 +28,8 @@ span.user-name {
   display: inline-block;
   position: relative;
   padding-bottom: 10px;
+}
+
+.btn-group {
+  margin-bottom: 1em;
 }
