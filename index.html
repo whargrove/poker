@@ -68,7 +68,7 @@
 
     // Listen for the user-registered event and update the #connected-users list
     socket.on('user-registered', function(usr) {
-      $('#connected-users').append( '<div id="' + usr.id + '" class="col-xs-6 col-md-3 clearfix user"><img src="/avatar.jpg" class="avatar img-responsive" /><h4>' + usr.displayName + '</h4></div>' );
+      $('#connected-users').append( '<div id="' + usr.id + '" class="col-xs-6 col-md-3 clearfix user"><img src="/avatar.jpg" class="hidden-xs avatar img-responsive" /><h4>' + usr.displayName + '</h4></div>' );
     });
 
     // Listen for click events on any voting buttons
