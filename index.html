@@ -14,7 +14,7 @@
     <button>Register</button>
   </form>
   <h1>Connected Users</h1>
-  <ul id="connected-users"></ul>
+  <div id="connected-users"></div>
   <div id="voting">
     <h1>Voting</h1>
     <button id="fibonacci-1" class="fibonacci">1</button>
@@ -37,10 +37,9 @@
       var user = $('#user-name').val();
       socket.emit('new-user', user);
       $('#user-name').val('');
-      // $('#connected-users').append($('<li>').text('You (' + user + ')'));
       // Hide the #register form so the same socket cannot register again
       $('#register').hide();
-      // Reveal #voting
+      // Reveal #voting so the user can now vote
       $('#voting').show();
       return false;
     });
@@ -55,12 +54,14 @@
 
     // Listen for the user-registered event and update the #connected-users list
     socket.on('user-registered', function(usr) {
-      $('#connected-users').append($('<li>').attr("id", usr.id).text(usr.displayName));
+      $('#connected-users').append( '<div id="' + usr.id + '">' + '<h2>' + usr.displayName + '</h2></div>' );
     });
 
     // Listen for user-voted and add the vote for the user
+    // If a vote is already there, remove it
     socket.on('user-voted', function(usr) {
-      $('#' + usr.id).append(' – ' + usr.vote);
+      $('#vote-' + usr.id).remove();
+      $('#' + usr.id).append( '<div class="vote" id="vote-' + usr.id + '">Vote: ' + usr.vote + '</div>' );
     });
 
     // When a user disconnects, remove them from #connected-users
