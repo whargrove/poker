@@ -18,7 +18,9 @@
       </div>
     </div>
     <div class="row">
-      <div id="connected-users" class="col-md-9"></div>
+      <div class="col-md-9">
+        <div id="connected-users" class="row"></div>
+      </div>
     </div>
     <div class="row">
       <div class="col-md-9">
@@ -73,7 +75,7 @@
 
     // Listen for the user-registered event and update the #connected-users list
     socket.on('user-registered', function(usr) {
-      $('#connected-users').append( '<div id="' + usr.id + '">' + '<h2>' + usr.displayName + '</h2></div>' );
+      $('#connected-users').append( '<div id="' + usr.id + '" class="col-xs-6 col-md-3 clearfix user">' + '<h4>' + usr.displayName + '</h4></div>' );
     });
 
     // Listen for user-voted and add the vote for the user

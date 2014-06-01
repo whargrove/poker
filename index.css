@@ -1,3 +1,7 @@
 #voting {
   display: none;
 }
+
+.user {
+  height: 150px;
+}
