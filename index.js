@@ -10,6 +10,10 @@ app.get('/index.css', function(req, res) {
   res.sendfile('index.css');
 });
 
+app.get('/avatar.jpg', function(req, res) {
+  res.sendfile('avatar.jpg');
+});
+
 io.on('connection', function(socket) {
   console.log('Socket: ' + socket.id + ' connected.');
   socket.on('new-user', function(user) {

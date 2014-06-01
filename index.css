@@ -3,5 +3,9 @@
 }
 
 .user {
-  height: 150px;
+  min-height: 150px;
+}
+
+.avatar {
+  max-width: 150px !important;
 }
