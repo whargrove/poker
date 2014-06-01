@@ -33,6 +33,14 @@ io.on('connection', function(socket) {
     console.log('Socket: ' + usr.id + ' voted with ' + usr.vote + '.');
   });
 
+  // Listen for clear-vote
+  // Match the clear-vote with the socket ID and broadcast vote-cleared to connected sockets
+  socket.on('clear-vote', function() {
+    var usr = new Object();
+    usr.id = socket.id;
+    io.emit('vote-cleared', usr);
+  });
+
   // When a socket disconnects, broadcast user-left
   // so that the client view can update
   socket.on('disconnect', function() {
