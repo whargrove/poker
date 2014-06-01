@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Scrum Poker</title>
+  <title>lyndaPoker</title>
   <script type="text/javascript" src="/socket.io/socket.io.js"></script>
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <link rel="stylesheet" href="index.css">
@@ -14,7 +14,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-9 header">
-        <h1>Welcome to Scrum Poker</h1>
+        <h1>lyndaPoker</h1>
       </div>
     </div>
     <div class="row">
@@ -35,7 +35,7 @@
     </div>
     <div class="row">
       <div id="voting" class="col-md-12">
-        <h1>Voting</h1>
+        <h3>Voting</h3>
         <button id="fibonacci-1" class="fibonacci btn btn-default btn-lg">1</button>
         <button id="fibonacci-2" class="fibonacci btn btn-default btn-lg">2</button>
         <button id="fibonacci-3" class="fibonacci btn btn-default btn-lg">3</button>
@@ -68,7 +68,8 @@
 
     // Listen for the user-registered event and update the #connected-users list
     socket.on('user-registered', function(usr) {
-      $('#connected-users').append( '<div id="' + usr.id + '" class="col-xs-6 col-md-3 clearfix user"><img src="/avatar.jpg" class="hidden-xs avatar img-responsive" /><h4>' + usr.displayName + '</h4></div>' );
+      $('#connected-users').append( '<div id="' + usr.id + '" class="col-xs-6 col-md-3 clearfix user"><img src="/avatar.jpg" class="hidden-xs avatar img-responsive" /><p><span class="user-vote h4" id="user-vote-' + usr.id + '">...</span><span class="user-name h4" id="user-name-' + usr.id + '"></span></p></div>' );
+      $('#user-name-' + usr.id).text(usr.displayName);
     });
 
     // Listen for click events on any voting buttons
@@ -82,8 +83,8 @@
     // Listen for user-voted and add the vote for the user
     // If a vote is already there, remove it
     socket.on('user-voted', function(usr) {
-      $('#vote-' + usr.id).remove();
-      $('#' + usr.id).append( '<div class="vote" id="vote-' + usr.id + '">Vote: ' + usr.vote + '</div>' );
+      $('#user-vote-' + usr.id).text('');
+      $('#user-vote-' + usr.id).text(usr.vote);
     });
 
     // Listen for click event on clear vote button
@@ -93,7 +94,7 @@
     });
 
     socket.on('vote-cleared', function(usr) {
-      $('#vote-' + usr.id).remove();
+      $('#user-vote-' + usr.id).text('...');
     });
 
     // When a user disconnects, remove them from #connected-users
