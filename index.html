@@ -12,25 +12,39 @@
 </head>
 <body>
   <div class="container">
-    <h1>Welcome to Scrum Poker</h1>
-    <form id="register" action="">
-      <input id="user-name" type="text" />
-      <button>Register</button>
-    </form>
-    <h1>Connected Users</h1>
-    <div id="connected-users"></div>
-    <div id="voting">
-      <h1>Voting</h1>
-      <button id="fibonacci-1" class="fibonacci">1</button>
-      <button id="fibonacci-2" class="fibonacci">2</button>
-      <button id="fibonacci-3" class="fibonacci">3</button>
-      <button id="fibonacci-5" class="fibonacci">5</button>
-      <button id="fibonacci-8" class="fibonacci">8</button>
-      <button id="fibonacci-13" class="fibonacci">13</button>
-      <button id="fibonacci-21" class="fibonacci">21</button>
-      <button id="fibonacci-34" class="fibonacci">34</button>
-      <button id="fibonacci-55" class="fibonacci">55</button>
-      <button id="fibonacci-infin" class="fibonacci">∞</button>
+    <div class="row">
+      <div class="col-md-9 header">
+        <h1>Welcome to Scrum Poker</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div id="connected-users" class="col-md-9"></div>
+    </div>
+    <div class="row">
+      <div class="col-md-9">
+        <form id="register" class="form-inline" role="form">
+          <div class="form-group">
+            <label class="sr-only" for="user-name">User name</label>
+            <input id="user-name" class="form-control" type="text" placeholder="User name" />
+          </div>
+          <button type="submit" class="btn btn-default">Register</button>
+        </form>
+      </div>
+    </div>
+    <div class="row">
+      <div id="voting" class="col-md-12">
+        <h1>Voting</h1>
+        <button id="fibonacci-1" class="fibonacci btn btn-default btn-lg">1</button>
+        <button id="fibonacci-2" class="fibonacci btn btn-default btn-lg">2</button>
+        <button id="fibonacci-3" class="fibonacci btn btn-default btn-lg">3</button>
+        <button id="fibonacci-5" class="fibonacci btn btn-default btn-lg">5</button>
+        <button id="fibonacci-8" class="fibonacci btn btn-default btn-lg">8</button>
+        <button id="fibonacci-13" class="fibonacci btn btn-default btn-lg">13</button>
+        <button id="fibonacci-21" class="fibonacci btn btn-default btn-lg">21</button>
+        <button id="fibonacci-34" class="fibonacci btn btn-default btn-lg">34</button>
+        <button id="fibonacci-55" class="fibonacci btn btn-default btn-lg">55</button>
+        <button id="fibonacci-infin" class="fibonacci btn btn-default btn-lg">∞</button>
+      </div>
     </div>
   </div>
   <script type="text/javascript">
