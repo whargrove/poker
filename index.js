@@ -1,6 +1,15 @@
 var app = require('express')();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+if (process.env.REDISTOGO_URL) {
+  // Initiate redis connection for production
+  var rtg = require('url').parse(process.ENV.REDISTOGO_URL);
+  var redis = require('redis').createClient(rtg.port, rtg.hostname);
+  redis.auth(rtg.auth.split(':')[1]);
+} else {
+  // Initiate redis connection for development
+  var redis = require('redis').createClient();
+}
 
 app.get('/', function(req, res) {
   res.sendfile('index.html');
@@ -16,6 +25,12 @@ app.get('/avatar.jpg', function(req, res) {
 
 io.on('connection', function(socket) {
   console.log('Socket: ' + socket.id + ' connected.');
+  if (redis.connected) {
+    console.log('[Redis] is connected.');
+  } else {
+    console.log('[Redis] is not connected.');
+  }
+
   socket.on('new-user', function(user) {
     // Create a usr object to store some properties
     var usr = new Object();
