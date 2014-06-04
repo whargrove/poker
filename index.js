@@ -36,6 +36,8 @@ io.on('connection', function(socket) {
     var usr = new Object();
     usr.displayName = user;
     usr.id = socket.id;
+    // Remember the user
+    remember(usr);
     // Broadcast the new user to connected sockets
     io.emit('user-registered', usr);
     console.log('Socket: ' + usr.id + ' registered as ' + usr.displayName + '.');
@@ -63,10 +65,17 @@ io.on('connection', function(socket) {
   // When a socket disconnects, broadcast user-left
   // so that the client view can update
   socket.on('disconnect', function() {
+    // Remove the user from Redis on disconnect
+    redis.del('user-' + socket.id);
     socket.broadcast.emit('user-left', socket.id);
     console.log('Socket: ' + socket.id + ' disconnected.')
   });
 });
+
+function remember(user) {
+  redis.hset('user-' + user.id, user.id, user.displayName, redis.print);
+  console.log(user.displayName + ' added at key: user-' + user.id);
+}
 
 var port = Number(process.env.PORT || 3000);
 server.listen(port);
