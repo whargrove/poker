@@ -9,6 +9,7 @@ if (process.env.REDISTOGO_URL) {
 } else {
   // Initiate redis connection for development
   var redis = require('redis').createClient();
+  redis.debug_mode = true;
 }
 
 app.get('/', function(req, res) {
@@ -25,10 +26,28 @@ app.get('/avatar.jpg', function(req, res) {
 
 io.on('connection', function(socket) {
   console.log('Socket: ' + socket.id + ' connected.');
+
+  // Verify connection to Redis and get a list of connected users
   if (redis.connected) {
-    console.log('[Redis] is connected.');
+    var connected_socket_ids = Object.keys(io.sockets.connected);
+    // Remove this socket from the array of connected sockets
+    var index = connected_socket_ids.indexOf(socket.id);
+    if ( index > -1 ) {
+      connected_socket_ids.splice(index, 1);
+    }
+
+    console.log('There are ' + connected_socket_ids.length + ' users connected.');
+    connected_socket_ids.forEach( function(id) {
+      var usr = new Object();
+      usr.id = id;
+      redis.hget('user-' + id, id, function(err, reply) {
+        usr.displayName = reply;
+        socket.emit('user-registered', usr);
+      });
+    });
   } else {
-    console.log('[Redis] is not connected.');
+    // The app will rely on Redis for persistence so we need to introduce some kind of error handling here
+    console.error('Cannot connect to Redis. Check the logs for the root cause.');
   }
 
   socket.on('new-user', function(user) {
