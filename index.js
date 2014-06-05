@@ -3,7 +3,7 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 if (process.env.REDISTOGO_URL) {
   // Initiate redis connection for production
-  var rtg = require('url').parse(process.ENV.REDISTOGO_URL);
+  var rtg = require('url').parse(process.env.REDISTOGO_URL);
   var redis = require('redis').createClient(rtg.port, rtg.hostname);
   redis.auth(rtg.auth.split(':')[1]);
 } else {
