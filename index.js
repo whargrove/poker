@@ -70,8 +70,38 @@ io.on('connection', function(socket) {
     var usr = new Object();
     usr.id = socket.id;
     usr.vote = vote;
-    // Broadcast the user's vote to connected sockets
-    io.emit('user-voted', usr);
+    // Persist the user's vote in redis
+    logVote(usr);
+    // Emit the vote to *this* socket only
+    socket.emit('user-voted', usr);
+
+    // Get the number of connected sockets
+    var connected_socket_ids = Object.keys(io.sockets.connected);
+    var voteCount = 0;
+    redis.keys('user-vote-*', function(err, reply) {
+      console.log('**Connected sockets: ' + connected_socket_ids.length);
+      voteCount = reply.length;
+      console.log('**Vote Count: ' + voteCount);
+      if (connected_socket_ids.length == voteCount) {
+        // Broadcast the votes
+        connected_socket_ids.forEach( function(id) {
+          console.log('** Socket: ' + id);
+          var vote = new Object();
+          vote.id = id;
+          redis.hget('user-vote-' + id, id, function(err, reply) {
+            vote.vote = reply;
+            io.emit('user-voted', vote);
+            console.log('**vote sent for ' + vote.id);
+          });
+        });
+      };
+    });
+
+    // redis.keys('user-vote-*', function(err, reply) {
+    //   console.log(reply.length);
+    // });
+    // Broadcast the user's vote to all connected sockets
+    // io.emit('user-voted', usr);
     console.log('Socket: ' + usr.id + ' voted with ' + usr.vote + '.');
   });
 
@@ -80,12 +110,16 @@ io.on('connection', function(socket) {
   socket.on('clear-vote', function() {
     var usr = new Object();
     usr.id = socket.id;
+    clearVote(usr);
     io.emit('vote-cleared', usr);
   });
 
   socket.on('disconnect', function() {
     // Remove the user from Redis on disconnect
     redis.del('user-' + socket.id);
+    var usr = new Object();
+    usr.id = socket.id;
+    clearVote(usr);
     io.emit('user-left', socket.id);
     console.log('Socket: ' + socket.id + ' disconnected.')
   });
@@ -94,6 +128,16 @@ io.on('connection', function(socket) {
 function remember(user) {
   redis.hset('user-' + user.id, user.id, user.displayName, redis.print);
   console.log(user.displayName + ' added at key: user-' + user.id);
+}
+
+function logVote(user) {
+  redis.hset('user-vote-' + user.id, user.id, user.vote);
+  console.log('Vote added at key: user-vote-' + user.id + ' for ' + user.vote);
+}
+
+function clearVote(user) {
+  redis.del('user-vote-' + user.id);
+  console.log('Vote cleared at key: user-vote-' + user.id);
 }
 
 var port = Number(process.env.PORT || 3000);
