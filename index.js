@@ -25,26 +25,28 @@ app.get('/avatar.jpg', function(req, res) {
 });
 
 io.on('connection', function(socket) {
-  console.log('Socket: ' + socket.id + ' connected.');
+  // console.log('Socket: ' + socket.id + ' connected.');
 
-  // Verify connection to Redis and get a list of connected users
+  // Verify connection to Redis and get a list of connected sockets
   if (redis.connected) {
     var connected_socket_ids = Object.keys(io.sockets.connected);
-    // Remove this socket from the array of connected sockets
+    // Reasonably assume socket.id to be unique
     var index = connected_socket_ids.indexOf(socket.id);
-    if ( index > -1 ) {
+    if ( index >= 0 ) {
       connected_socket_ids.splice(index, 1);
-    }
+    };
 
-    console.log('There are ' + connected_socket_ids.length + ' users connected.');
-    connected_socket_ids.forEach( function(id) {
-      var usr = new Object();
-      usr.id = id;
-      redis.hget('user-' + id, id, function(err, reply) {
-        usr.displayName = reply;
-        socket.emit('user-registered', usr);
+    // console.log('There are ' + connected_socket_ids.length + ' users connected.');
+    if (connected_socket_ids.length > 0) {
+      connected_socket_ids.forEach( function(id) {
+        var usr = new Object();
+        usr.id = id;
+        redis.hget('user-' + id, id, function(err, reply) {
+          usr.displayName = reply;
+          socket.emit('user-registered', usr);
+        });
       });
-    });
+    };
   } else {
     // The app will rely on Redis for persistence so we need to introduce some kind of error handling here
     console.error('Cannot connect to Redis. Check the logs for the root cause.');
@@ -81,12 +83,10 @@ io.on('connection', function(socket) {
     io.emit('vote-cleared', usr);
   });
 
-  // When a socket disconnects, broadcast user-left
-  // so that the client view can update
   socket.on('disconnect', function() {
     // Remove the user from Redis on disconnect
     redis.del('user-' + socket.id);
-    socket.broadcast.emit('user-left', socket.id);
+    io.emit('user-left', socket.id);
     console.log('Socket: ' + socket.id + ' disconnected.')
   });
 });
