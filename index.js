@@ -97,9 +97,6 @@ io.on('connection', function(socket) {
       };
     });
 
-    // redis.keys('user-vote-*', function(err, reply) {
-    //   console.log(reply.length);
-    // });
     // Broadcast the user's vote to all connected sockets
     // io.emit('user-voted', usr);
     console.log('Socket: ' + usr.id + ' voted with ' + usr.vote + '.');
